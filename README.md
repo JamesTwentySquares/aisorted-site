@@ -17,9 +17,9 @@ Push to `main` → pull in cPanel → `.cpanel.yml` auto-deploys to `public_html
 | File | Purpose |
 |------|---------|
 | `index.html` | Full landing page |
-| `contact.php` | Form handler (emails to hello@aisorted.co.za) |
+| `contact.php` | Form handler (emails to howzit@aisorted.co.za) |
 | `.cpanel.yml` | cPanel auto-deploy config |
 
 ## Setup
 
-See `SETUP.md` for step-by-step deployment instructions.
+Push to `main`, then in cPanel → Git™ Version Control → Update from Remote → Deploy HEAD Commit.
