@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 // ── CONFIG ──
 // Change this to your actual email address
-$to_email = 'hello@aisorted.co.za';
+$to_email = 'howzit@aisorted.co.za';
 $from_email = 'noreply@aisorted.co.za';
 
 // ── HONEYPOT (basic bot protection) ──
