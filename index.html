@@ -1,0 +1,1446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Sorted — Smart AI Tools for SA Businesses</title>
+  <meta name="description" content="Practical AI automation for South African small businesses. WhatsApp chatbots, content engines, booking systems, and more — set up in days, not months." />
+  <meta property="og:title" content="AI Sorted — Your business, sorted by AI." />
+  <meta property="og:description" content="Practical AI tools for SA small businesses. More bookings, fewer missed calls, less admin." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://aisorted.co.za" />
+  <link rel="canonical" href="https://aisorted.co.za" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0d0f10;
+      --bg2: #13161a;
+      --bg3: #1a1e24;
+      --border: rgba(255,255,255,0.07);
+      --accent: #f5a623;
+      --accent2: #e8891a;
+      --text: #e8e6e1;
+      --muted: #7a7870;
+      --green: #4ade80;
+      --red: #ef4444;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.025;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 4rem;
+      background: rgba(13, 15, 16, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.25rem;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .logo span { color: var(--accent); }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 2.5rem;
+      align-items: center;
+    }
+
+    nav ul a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    nav ul a:hover { color: var(--text); }
+
+    .nav-cta {
+      background: var(--accent);
+      color: #000 !important;
+      padding: 0.5rem 1.25rem;
+      border-radius: 6px;
+      font-weight: 600 !important;
+      transition: background 0.2s !important;
+    }
+
+    .nav-cta:hover { background: var(--accent2) !important; color: #000 !important; }
+
+    /* Hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+      z-index: 110;
+    }
+
+    .hamburger div {
+      width: 24px;
+      height: 2px;
+      background: var(--text);
+      transition: transform 0.3s, opacity 0.3s;
+    }
+
+    .hamburger.open div:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .hamburger.open div:nth-child(2) { opacity: 0; }
+    .hamburger.open div:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 8rem 4rem 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-glow {
+      position: absolute;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(245,166,35,0.12) 0%, transparent 70%);
+      top: -100px; right: -100px;
+      pointer-events: none;
+    }
+
+    .hero-glow2 {
+      position: absolute;
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(74,222,128,0.06) 0%, transparent 70%);
+      bottom: 0px; left: 200px;
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(245,166,35,0.1);
+      border: 1px solid rgba(245,166,35,0.25);
+      color: var(--accent);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.4rem 1rem;
+      border-radius: 100px;
+      margin-bottom: 2rem;
+      width: fit-content;
+    }
+
+    .hero-badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    .hero h1 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      line-height: 1.0;
+      letter-spacing: -0.03em;
+      max-width: 820px;
+    }
+
+    .hero h1 em { font-style: normal; color: var(--accent); }
+
+    .hero-sub {
+      margin-top: 1.75rem;
+      font-size: 1.15rem;
+      color: var(--muted);
+      font-weight: 300;
+      max-width: 520px;
+      line-height: 1.7;
+    }
+
+    .hero-actions {
+      margin-top: 2.5rem;
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #000;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding: 0.85rem 2rem;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+      display: inline-block;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-primary:hover { background: var(--accent2); transform: translateY(-1px); }
+
+    .btn-ghost {
+      color: var(--muted);
+      font-size: 0.9rem;
+      font-weight: 500;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: color 0.2s;
+    }
+
+    .btn-ghost:hover { color: var(--text); }
+
+    .hero-stats {
+      margin-top: 5rem;
+      display: flex;
+      gap: 3rem;
+    }
+
+    .stat-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+
+    .stat-num span { color: var(--accent); }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-top: 0.15rem;
+    }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── SECTION COMMON ── */
+    section { padding: 6rem 4rem; }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: clamp(2rem, 4vw, 2.75rem);
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      max-width: 600px;
+    }
+
+    .section-sub {
+      margin-top: 1rem;
+      color: var(--muted);
+      font-size: 1rem;
+      font-weight: 300;
+      max-width: 480px;
+      line-height: 1.7;
+    }
+
+    /* ── SERVICES ── */
+    #services { background: var(--bg2); }
+
+    .services-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 3.5rem;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .service-card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.75rem;
+      transition: border-color 0.25s, transform 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card:hover {
+      border-color: rgba(245,166,35,0.3);
+      transform: translateY(-2px);
+    }
+
+    .service-card.featured {
+      border-color: rgba(245,166,35,0.4);
+      background: linear-gradient(135deg, rgba(245,166,35,0.06), var(--bg3));
+      grid-column: span 2;
+    }
+
+    .service-card.featured::before {
+      content: 'Highest Impact';
+      position: absolute;
+      top: 1.25rem; right: 1.25rem;
+      background: var(--accent);
+      color: #000;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.65rem;
+      border-radius: 4px;
+    }
+
+    .card-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      margin-bottom: 0.75rem;
+    }
+
+    .card-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.25rem;
+    }
+
+    .card-sub {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+
+    .card-tags {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      font-size: 0.72rem;
+      font-weight: 500;
+      padding: 0.25rem 0.6rem;
+      border-radius: 4px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+
+    .tag.price {
+      color: var(--accent);
+      background: rgba(245,166,35,0.08);
+      border-color: rgba(245,166,35,0.2);
+    }
+
+    .card-desc {
+      font-size: 0.875rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ── TRAINING ── */
+    #training { background: var(--bg); }
+
+    .training-grid {
+      margin-top: 3.5rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .training-card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem;
+      transition: border-color 0.25s;
+    }
+
+    .training-card:hover { border-color: rgba(74,222,128,0.3); }
+
+    .training-icon {
+      width: 48px; height: 48px;
+      border-radius: 10px;
+      background: rgba(74,222,128,0.1);
+      border: 1px solid rgba(74,222,128,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .training-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1.05rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .training-meta {
+      font-size: 0.78rem;
+      color: var(--green);
+      margin-bottom: 0.75rem;
+      font-weight: 500;
+    }
+
+    .training-desc {
+      font-size: 0.875rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .training-list {
+      list-style: none;
+      margin-top: 0.75rem;
+      padding: 0;
+    }
+
+    .training-list li {
+      font-size: 0.825rem;
+      color: var(--muted);
+      padding: 0.3rem 0;
+      padding-left: 1.2rem;
+      position: relative;
+    }
+
+    .training-list li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.65rem;
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--green);
+      opacity: 0.6;
+    }
+
+    /* ── HOW IT WORKS ── */
+    #how { background: var(--bg2); }
+
+    .steps {
+      margin-top: 3.5rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0;
+      position: relative;
+    }
+
+    .steps::before {
+      content: '';
+      position: absolute;
+      top: 2.25rem;
+      left: 2rem;
+      right: 2rem;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--border) 20%, var(--border) 80%, transparent);
+    }
+
+    .step {
+      padding: 0 2rem;
+      position: relative;
+    }
+
+    .step-dot {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 0.9rem;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .step-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .step-desc {
+      font-size: 0.875rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    /* ── WHY US ── */
+    #why { background: var(--bg); }
+
+    .why-grid {
+      margin-top: 3.5rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+
+    .why-card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.75rem;
+    }
+
+    .why-card.wide { grid-column: span 2; }
+
+    .why-icon { font-size: 1.5rem; margin-bottom: 1rem; }
+
+    .why-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .why-desc {
+      font-size: 0.875rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    /* ── FAQ ── */
+    #faq { background: var(--bg2); }
+
+    .faq-list {
+      margin-top: 3rem;
+      max-width: 720px;
+    }
+
+    .faq-item {
+      border-bottom: 1px solid var(--border);
+    }
+
+    .faq-q {
+      width: 100%;
+      background: none;
+      border: none;
+      padding: 1.25rem 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      text-align: left;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--text);
+      gap: 1rem;
+    }
+
+    .faq-q:hover { color: var(--accent); }
+
+    .faq-arrow {
+      flex-shrink: 0;
+      width: 20px; height: 20px;
+      transition: transform 0.3s;
+    }
+
+    .faq-item.open .faq-arrow { transform: rotate(180deg); }
+
+    .faq-a {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease, padding 0.35s ease;
+      padding: 0 0;
+    }
+
+    .faq-item.open .faq-a {
+      max-height: 300px;
+      padding: 0 0 1.25rem;
+    }
+
+    .faq-a p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* ── CONTACT ── */
+    #contact { background: var(--bg); }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .contact-info {
+      padding: 2rem 0;
+    }
+
+    .contact-info p {
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 2rem;
+    }
+
+    .contact-detail {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.6rem 0;
+    }
+
+    .contact-detail-icon {
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      background: rgba(245,166,35,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .contact-detail-icon svg { width: 16px; height: 16px; }
+
+    .contact-detail-text {
+      font-size: 0.875rem;
+      color: var(--text);
+    }
+
+    .contact-detail-text a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .contact-detail-text a:hover { text-decoration: underline; }
+
+    .contact-detail-label {
+      font-size: 0.72rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .contact-form-box {
+      background: var(--bg3);
+      border: 1px solid rgba(245,166,35,0.2);
+      border-radius: 16px;
+      padding: 2.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .contact-form-box::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at top, rgba(245,166,35,0.07), transparent 60%);
+      pointer-events: none;
+    }
+
+    .form-group {
+      margin-bottom: 1.25rem;
+      position: relative;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.8rem 1rem;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s;
+      -webkit-appearance: none;
+    }
+
+    .form-group select {
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' viewBox='0 0 12 7'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237a7870' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      padding-right: 2.5rem;
+    }
+
+    .form-group select option {
+      background: var(--bg3);
+      color: var(--text);
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-color: rgba(245,166,35,0.4);
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: var(--muted); }
+
+    .form-group textarea { resize: vertical; min-height: 100px; }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .form-submit {
+      background: var(--accent);
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      padding: 0.9rem 2rem;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      width: 100%;
+      margin-top: 0.5rem;
+    }
+
+    .form-submit:hover { background: var(--accent2); transform: translateY(-1px); }
+    .form-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    .form-status {
+      text-align: center;
+      font-size: 0.875rem;
+      margin-top: 1rem;
+      min-height: 1.5rem;
+    }
+
+    .form-status.success { color: var(--green); }
+    .form-status.error { color: var(--red); }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 2rem 4rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--muted);
+      font-size: 0.8rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    footer a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    footer a:hover { color: var(--text); }
+
+    .footer-links { display: flex; gap: 1.5rem; align-items: center; }
+
+    /* ── MOBILE OVERLAY ── */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 105;
+      background: rgba(13, 15, 16, 0.97);
+      backdrop-filter: blur(20px);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+    }
+
+    .mobile-menu.open { display: flex; }
+
+    .mobile-menu a {
+      color: var(--text);
+      text-decoration: none;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1.5rem;
+      transition: color 0.2s;
+    }
+
+    .mobile-menu a:hover { color: var(--accent); }
+
+    .mobile-menu .nav-cta {
+      background: var(--accent);
+      color: #000 !important;
+      padding: 0.75rem 2rem;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    /* ── RESPONSIVE: TABLET ── */
+    @media (max-width: 1024px) {
+      nav { padding: 1rem 2rem; }
+      nav ul { gap: 1.5rem; }
+      .hero { padding: 8rem 2rem 4rem; }
+      section { padding: 5rem 2rem; }
+      .services-grid { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+      .service-card.featured { grid-column: span 2; }
+      .contact-grid { max-width: 100%; }
+    }
+
+    /* ── RESPONSIVE: MOBILE ── */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      nav ul { display: none; }
+      .hamburger { display: flex; }
+      .hero { padding: 7rem 1.5rem 4rem; }
+      .hero h1 { font-size: clamp(2.25rem, 10vw, 3.5rem); }
+      .hero-sub { font-size: 1rem; }
+      section { padding: 4rem 1.5rem; }
+      .section-title { font-size: clamp(1.6rem, 5vw, 2.25rem); }
+      .hero-stats { gap: 2rem; flex-wrap: wrap; }
+      .stat-num { font-size: 1.6rem; }
+      .services-grid { grid-template-columns: 1fr; }
+      .service-card.featured { grid-column: span 1; }
+      .services-header { flex-direction: column; align-items: flex-start; }
+      .training-grid { grid-template-columns: 1fr; }
+      .steps::before { display: none; }
+      .steps { gap: 2rem; grid-template-columns: 1fr; }
+      .step { padding: 0; }
+      .why-grid { grid-template-columns: 1fr; }
+      .why-card.wide { grid-column: span 1; }
+      .contact-grid { grid-template-columns: 1fr; }
+      .contact-info { padding: 0 0 1rem; }
+      .contact-form-box { padding: 1.5rem; }
+      .form-row { grid-template-columns: 1fr; }
+      .cta-box { padding: 2rem 1.25rem; }
+      footer { padding: 1.5rem; flex-direction: column; text-align: center; }
+      .footer-links { flex-direction: column; gap: 0.75rem; }
+      .faq-q { font-size: 0.9rem; }
+    }
+
+    /* ── RESPONSIVE: SMALL MOBILE ── */
+    @media (max-width: 380px) {
+      .hero { padding: 6rem 1rem 3rem; }
+      section { padding: 3rem 1rem; }
+      .hero-stats { gap: 1.5rem; }
+      .hero-actions { flex-direction: column; align-items: flex-start; }
+      .card-tags { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="logo">AI<span>Sorted</span></a>
+    <ul>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#training">Training</a></li>
+      <li><a href="#how">How it works</a></li>
+      <li><a href="#why">Why us</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="#contact" class="nav-cta">Get started</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <div></div><div></div><div></div>
+    </button>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#services" onclick="closeMenu()">Services</a>
+    <a href="#training" onclick="closeMenu()">Training</a>
+    <a href="#how" onclick="closeMenu()">How it works</a>
+    <a href="#why" onclick="closeMenu()">Why us</a>
+    <a href="#faq" onclick="closeMenu()">FAQ</a>
+    <a href="#contact" class="nav-cta" onclick="closeMenu()">Get started</a>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-glow"></div>
+    <div class="hero-glow2"></div>
+    <div class="hero-badge">South African AI for business</div>
+    <h1>Your business,<br /><em>sorted</em> by AI.</h1>
+    <p class="hero-sub">Practical AI tools for SA small businesses. More bookings, fewer missed calls, less admin — without the corporate price tag.</p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn-primary">Book a free consult</a>
+      <a href="#services" class="btn-ghost">See what we do →</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-num">R2–5<span>k</span></div>
+        <div class="stat-label">per month</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">1–2<span></span></div>
+        <div class="stat-label">day setup</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">24<span>/7</span></div>
+        <div class="stat-label">always on</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="services-header reveal">
+      <div>
+        <div class="section-label">What we offer</div>
+        <h2 class="section-title">AI tools built for the SA market</h2>
+        <p class="section-sub">Off-the-shelf software wasn't made for your business. We set up tools that actually fit how you work.</p>
+      </div>
+    </div>
+    <div class="services-grid">
+      <div class="service-card reveal">
+        <div class="card-num">01</div>
+        <div class="card-title">AI Receptionist & Lead Capture</div>
+        <div class="card-sub">WhatsApp + website chatbot</div>
+        <div class="card-tags">
+          <span class="tag">1–2 day setup</span>
+          <span class="tag price">R3–5k/month</span>
+        </div>
+        <div class="card-desc">24/7 booking, FAQ, and lead qualification on WhatsApp and your website. Never miss another enquiry.</div>
+      </div>
+      <div class="service-card reveal">
+        <div class="card-num">02</div>
+        <div class="card-title">Social Media Content Engine</div>
+        <div class="card-sub">AI-generated posts + scheduling</div>
+        <div class="card-tags">
+          <span class="tag">1 day setup</span>
+          <span class="tag price">R2–4k/month</span>
+        </div>
+        <div class="card-desc">Monthly content calendar, AI-written posts in your brand voice, auto-scheduled across Facebook, Instagram, and TikTok.</div>
+      </div>
+      <div class="service-card reveal">
+        <div class="card-num">03</div>
+        <div class="card-title">Smart Email & Follow-Up</div>
+        <div class="card-sub">AI drafts + auto sequences</div>
+        <div class="card-tags">
+          <span class="tag">2–3 day setup</span>
+          <span class="tag price">R3–6k/month</span>
+        </div>
+        <div class="card-desc">AI writes follow-up emails, quote reminders, and nurture sequences. No lead ever falls through the cracks again.</div>
+      </div>
+      <div class="service-card reveal">
+        <div class="card-num">04</div>
+        <div class="card-title">Document & Admin Autopilot</div>
+        <div class="card-sub">Proposals, invoices, reports</div>
+        <div class="card-tags">
+          <span class="tag">1–2 day setup</span>
+          <span class="tag price">R2–4k/month</span>
+        </div>
+        <div class="card-desc">Templates and AI-filled proposals, meeting minutes, reports, and client comms — from bullet points in seconds.</div>
+      </div>
+      <div class="service-card reveal">
+        <div class="card-num">05</div>
+        <div class="card-title">Google Reviews Booster</div>
+        <div class="card-sub">Automated review requests</div>
+        <div class="card-tags">
+          <span class="tag">Half-day setup</span>
+          <span class="tag price">R1.5–3k/month</span>
+        </div>
+        <div class="card-desc">Auto SMS/WhatsApp after each job asking for a review. AI drafts your responses to keep your reputation spotless.</div>
+      </div>
+      <div class="service-card reveal">
+        <div class="card-num">06</div>
+        <div class="card-title">Smart Booking & Calendar</div>
+        <div class="card-sub">AI scheduling assistant</div>
+        <div class="card-tags">
+          <span class="tag">1 day setup</span>
+          <span class="tag price">R2–4k/month</span>
+        </div>
+        <div class="card-desc">Clients self-book via WhatsApp or web. Auto-reminders reduce no-shows by 40–60%.</div>
+      </div>
+      <div class="service-card reveal">
+        <div class="card-num">07</div>
+        <div class="card-title">Invoice & Expense Autopilot</div>
+        <div class="card-sub">AI bookkeeping assistant</div>
+        <div class="card-tags">
+          <span class="tag">2–3 day setup</span>
+          <span class="tag price">R3–5k/month</span>
+        </div>
+        <div class="card-desc">Photo a receipt → auto-categorised. Jobs completed → invoice generated and sent. Overdue → auto-chased.</div>
+      </div>
+      <div class="service-card featured reveal">
+        <div class="card-num">★ Bundle</div>
+        <div class="card-title">The Full Front Office</div>
+        <div class="card-sub">Receptionist + booking + reviews + follow-ups</div>
+        <div class="card-tags">
+          <span class="tag">1 week setup</span>
+          <span class="tag price">R8–12k/month</span>
+        </div>
+        <div class="card-desc">Complete customer journey automation — from first enquiry to glowing review. Like hiring a full-time receptionist and marketing assistant at a fraction of the cost.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRAINING -->
+  <section id="training">
+    <div class="reveal">
+      <div class="section-label">AI Training</div>
+      <h2 class="section-title">Learn to use AI yourself</h2>
+      <p class="section-sub">Don't want us to run it for you? We'll teach your team to use AI tools confidently — no tech background required.</p>
+    </div>
+    <div class="training-grid">
+      <div class="training-card reveal">
+        <div class="training-icon">
+          <svg width="22" height="22" fill="none" stroke="#4ade80" stroke-width="1.5" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        </div>
+        <div class="training-title">AI Kickstart Workshop</div>
+        <div class="training-meta">Half-day · Up to 15 people · From R8,000</div>
+        <div class="training-desc">Hands-on intro to AI tools for your team. Walk out with real skills, not theory.</div>
+        <ul class="training-list">
+          <li>Hands-on with Claude, ChatGPT, and more</li>
+          <li>Prompt engineering for business tasks</li>
+          <li>Live exercises using your actual work</li>
+          <li>POPIA and data safety guidelines</li>
+        </ul>
+      </div>
+      <div class="training-card reveal">
+        <div class="training-icon">
+          <svg width="22" height="22" fill="none" stroke="#4ade80" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 20V10M18 20V4M6 20v-4"/></svg>
+        </div>
+        <div class="training-title">AI Power User Programme</div>
+        <div class="training-meta">4 weeks · Up to 10 people · From R18,000</div>
+        <div class="training-desc">Deep-dive programme that turns your team into confident AI users with their own playbook.</div>
+        <ul class="training-list">
+          <li>4 × 2-hour sessions over 4 weeks</li>
+          <li>Advanced prompting and automation</li>
+          <li>Build your business AI playbook</li>
+          <li>Templates and SOPs included</li>
+        </ul>
+      </div>
+      <div class="training-card reveal">
+        <div class="training-icon">
+          <svg width="22" height="22" fill="none" stroke="#4ade80" stroke-width="1.5" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+        </div>
+        <div class="training-title">Executive AI Briefing</div>
+        <div class="training-meta">90 minutes · For decision-makers · From R5,000</div>
+        <div class="training-desc">Strategic overview for leaders. What AI can do for your business, where to invest, what to avoid.</div>
+        <ul class="training-list">
+          <li>AI landscape — what's real, what's hype</li>
+          <li>Competitor analysis in your industry</li>
+          <li>ROI framework and risk assessment</li>
+          <li>Prioritised recommendations</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section id="how">
+    <div class="reveal">
+      <div class="section-label">The process</div>
+      <h2 class="section-title">Up and running in days, not months</h2>
+      <p class="section-sub">No IT department needed. We handle the setup, you handle the business.</p>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <div class="step-dot">1</div>
+        <div class="step-title">Discovery call</div>
+        <div class="step-desc">We learn how your business works, what's falling through the cracks, and which tools will make the biggest difference.</div>
+      </div>
+      <div class="step reveal">
+        <div class="step-dot">2</div>
+        <div class="step-title">Custom setup</div>
+        <div class="step-desc">We configure everything for your business — your voice, your pricing, your schedule. No templates, no one-size-fits-all.</div>
+      </div>
+      <div class="step reveal">
+        <div class="step-dot">3</div>
+        <div class="step-title">Go live</div>
+        <div class="step-desc">Your tools are live within days. We walk you through everything and stay available as you get comfortable.</div>
+      </div>
+      <div class="step reveal">
+        <div class="step-dot">4</div>
+        <div class="step-title">Ongoing support</div>
+        <div class="step-desc">Monthly check-ins, tweaks as your business evolves, and a team that actually picks up the phone.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY US -->
+  <section id="why">
+    <div class="reveal">
+      <div class="section-label">Why AI Sorted</div>
+      <h2 class="section-title">Built for how SA businesses actually work</h2>
+    </div>
+    <div class="why-grid">
+      <div class="why-card reveal">
+        <div class="why-icon">&#x1F1FF;&#x1F1E6;</div>
+        <div class="why-title">SA-first thinking</div>
+        <div class="why-desc">We understand the local market — WhatsApp culture, Rand-sensitive pricing, load shedding realities, and what actually resonates with South African customers.</div>
+      </div>
+      <div class="why-card reveal">
+        <div class="why-icon">&#x26A1;</div>
+        <div class="why-title">No tech jargon</div>
+        <div class="why-desc">You don't need to know what an API is. We set it up, explain what it does in plain language, and make sure it just works.</div>
+      </div>
+      <div class="why-card reveal">
+        <div class="why-icon">&#x1F4DE;</div>
+        <div class="why-title">Real people behind the tools</div>
+        <div class="why-desc">You're not buying software from a faceless company. You're working with a local team who will answer your WhatsApp and sort your problems out.</div>
+      </div>
+      <div class="why-card wide reveal">
+        <div class="why-icon">&#x1F4B0;</div>
+        <div class="why-title">Fraction of the cost of hiring</div>
+        <div class="why-desc">A junior admin hire costs R8,000–R12,000/month before you factor in UIF, equipment, and training. Our Full Front Office bundle delivers more value — available 24/7 — for less. For small businesses, that's the difference between hiring and not hiring at all.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <div class="reveal">
+      <div class="section-label">Questions</div>
+      <h2 class="section-title">Frequently asked</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item reveal">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Do I need to be technical to use your services?
+          <svg class="faq-arrow" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 7.5L10 12.5L15 7.5"/></svg>
+        </button>
+        <div class="faq-a"><p>Not at all. Our done-for-you packages mean you don't touch any technology — we handle the setup, maintenance, and optimisation. If you choose training, we teach you in plain language with hands-on exercises using your real work.</p></div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          How long does setup take?
+          <svg class="faq-arrow" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 7.5L10 12.5L15 7.5"/></svg>
+        </button>
+        <div class="faq-a"><p>Most individual services are live within 1–3 days. The Full Front Office bundle takes about a week. We'll give you a clear timeline on your discovery call.</p></div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          What about POPIA and data privacy?
+          <svg class="faq-arrow" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 7.5L10 12.5L15 7.5"/></svg>
+        </button>
+        <div class="faq-a"><p>Every tool we implement follows POPIA guidelines. We'll set up proper opt-in flows, data handling policies, and make sure your customer data stays secure. We also include AI usage policy templates as part of our service.</p></div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Can I start small and add more later?
+          <svg class="faq-arrow" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 7.5L10 12.5L15 7.5"/></svg>
+        </button>
+        <div class="faq-a"><p>Absolutely — that's what we recommend. Start with one service that solves your biggest pain point, see the results, and add more when you're ready. No lock-in contracts.</p></div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          What happens if something breaks?
+          <svg class="faq-arrow" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 7.5L10 12.5L15 7.5"/></svg>
+        </button>
+        <div class="faq-a"><p>We monitor your automations and fix issues proactively. You also get direct WhatsApp access to our team during business hours. We're a small team — you'll speak to someone who actually knows your setup.</p></div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Do you work with businesses outside Johannesburg?
+          <svg class="faq-arrow" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 7.5L10 12.5L15 7.5"/></svg>
+        </button>
+        <div class="faq-a"><p>Yes — everything we do works remotely. We have clients across South Africa. Training workshops can be done in-person (Gauteng) or via video call anywhere.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="reveal">
+      <div class="section-label" style="text-align:center;">Get started</div>
+      <h2 class="section-title" style="text-align:center; max-width:100%; margin: 0 auto;">Let's get your business sorted</h2>
+      <p class="section-sub" style="text-align:center; max-width:100%; margin: 0.75rem auto 3rem;">Tell us a bit about your business and we'll reach out to book a free 30-minute discovery call.</p>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-info reveal">
+        <p>Whether you want us to handle your AI automation or train your team to do it themselves, it starts with a quick chat. No hard sell, no commitment — just an honest look at what AI can do for your specific business.</p>
+        <div class="contact-detail">
+          <div class="contact-detail-icon">
+            <svg fill="none" stroke="#f5a623" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          </div>
+          <div>
+            <div class="contact-detail-label">Email</div>
+            <div class="contact-detail-text"><a href="mailto:hello@aisorted.co.za">hello@aisorted.co.za</a></div>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-detail-icon">
+            <svg fill="none" stroke="#f5a623" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+          </div>
+          <div>
+            <div class="contact-detail-label">WhatsApp</div>
+            <div class="contact-detail-text"><a href="https://wa.me/27XXXXXXXXXX">+27 XX XXX XXXX</a></div>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-detail-icon">
+            <svg fill="none" stroke="#f5a623" stroke-width="1.5" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><circle cx="12" cy="11" r="3"/></svg>
+          </div>
+          <div>
+            <div class="contact-detail-label">Based in</div>
+            <div class="contact-detail-text">Johannesburg, South Africa</div>
+          </div>
+        </div>
+      </div>
+      <div class="contact-form-box reveal">
+        <form id="contactForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="name">Name</label>
+              <input type="text" id="name" name="name" placeholder="Your name" required />
+            </div>
+            <div class="form-group">
+              <label for="business">Business name</label>
+              <input type="text" id="business" name="business" placeholder="Your company" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" placeholder="you@company.co.za" required />
+            </div>
+            <div class="form-group">
+              <label for="phone">WhatsApp / Phone</label>
+              <input type="tel" id="phone" name="phone" placeholder="+27..." />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="interest">What are you interested in?</label>
+            <select id="interest" name="interest">
+              <option value="">Select an option...</option>
+              <option value="ai-receptionist">AI Receptionist & Lead Capture</option>
+              <option value="content-engine">Social Media Content Engine</option>
+              <option value="email-followup">Smart Email & Follow-Up</option>
+              <option value="document-autopilot">Document & Admin Autopilot</option>
+              <option value="reviews-booster">Google Reviews Booster</option>
+              <option value="booking-calendar">Smart Booking & Calendar</option>
+              <option value="invoice-autopilot">Invoice & Expense Autopilot</option>
+              <option value="full-front-office">The Full Front Office Bundle</option>
+              <option value="training">AI Training / Workshops</option>
+              <option value="not-sure">Not sure yet — help me decide</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="message">Tell us about your business</label>
+            <textarea id="message" name="message" placeholder="What does your business do? What's your biggest time-waster right now?"></textarea>
+          </div>
+          <button type="submit" class="form-submit" id="submitBtn">Send — let's chat</button>
+          <div class="form-status" id="formStatus"></div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+      <a href="#" class="logo" style="font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;text-decoration:none;color:var(--text);">AI<span style="color:var(--accent);">Sorted</span></a>
+      <span>&copy; 2026</span>
+    </div>
+    <div class="footer-links">
+      <a href="mailto:hello@aisorted.co.za">hello@aisorted.co.za</a>
+      <a href="https://wa.me/27XXXXXXXXXX">WhatsApp</a>
+      <span>Johannesburg, South Africa</span>
+    </div>
+  </footer>
+
+  <script>
+    // ── MOBILE MENU ──
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('open');
+      mobileMenu.classList.toggle('open');
+      document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+    });
+
+    function closeMenu() {
+      hamburger.classList.remove('open');
+      mobileMenu.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    // ── FAQ ACCORDION ──
+    function toggleFaq(btn) {
+      const item = btn.parentElement;
+      const wasOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+      if (!wasOpen) item.classList.add('open');
+    }
+
+    // ── SCROLL REVEAL ──
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 60);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // ── CONTACT FORM ──
+    // =============================================
+    // FORM SUBMISSION — Choose ONE of these options:
+    //
+    // OPTION 1: Formspree (free, easiest)
+    //   1. Go to https://formspree.io and create a free account
+    //   2. Create a new form, get your form ID (e.g., "xpzvqkgl")
+    //   3. Replace YOUR_FORM_ID below with your actual ID
+    //
+    // OPTION 2: Web3Forms (free, no account needed)
+    //   1. Go to https://web3forms.com
+    //   2. Enter your email to get an access key
+    //   3. Uncomment the Web3Forms section and comment out Formspree
+    //
+    // OPTION 3: EmailJS (free tier, sends from browser)
+    //   1. Go to https://www.emailjs.com
+    //   2. Set up a service and template
+    //   3. Use their SDK instead
+    //
+    // OPTION 4: Afrihost email forwarding
+    //   Since you have cPanel, you can also create a simple
+    //   PHP handler (contact.php) that uses mail() — see below
+    // =============================================
+
+    const form = document.getElementById('contactForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const formStatus = document.getElementById('formStatus');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending...';
+      formStatus.textContent = '';
+      formStatus.className = 'form-status';
+
+      const data = new FormData(form);
+
+      try {
+        // ── OPTION 1: Formspree ──
+        const res = await fetch('https://formspree.io/f/YOUR_FORM_ID', {
+          method: 'POST',
+          body: data,
+          headers: { 'Accept': 'application/json' }
+        });
+
+        // ── OPTION 2: Web3Forms (uncomment below, comment out Formspree above) ──
+        // data.append('access_key', 'YOUR_WEB3FORMS_KEY');
+        // data.append('subject', 'New AI Sorted enquiry from ' + data.get('name'));
+        // const res = await fetch('https://api.web3forms.com/submit', {
+        //   method: 'POST',
+        //   body: data
+        // });
+
+        if (res.ok) {
+          formStatus.textContent = 'Sent! We\'ll be in touch within 24 hours.';
+          formStatus.className = 'form-status success';
+          form.reset();
+        } else {
+          throw new Error('Server error');
+        }
+      } catch (err) {
+        formStatus.textContent = 'Something went wrong. Please email us directly at hello@aisorted.co.za';
+        formStatus.className = 'form-status error';
+      }
+
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Send — let\'s chat';
+    });
+
+    // ── NAV ACTIVE STATE ──
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('nav ul a:not(.nav-cta)');
+
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(section => {
+        const top = section.offsetTop - 120;
+        if (window.scrollY >= top) current = section.getAttribute('id');
+      });
+      navLinks.forEach(link => {
+        link.style.color = link.getAttribute('href') === '#' + current ? 'var(--text)' : '';
+      });
+    });
+  </script>
+
+</body>
+</html>
