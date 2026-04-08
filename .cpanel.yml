@@ -1,6 +1,6 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/YOUR_CPANEL_USERNAME/public_html/
+    - export DEPLOYPATH=/home/aisortp6e1q8/public_html/
     - /bin/cp index.html $DEPLOYPATH
     - /bin/cp contact.php $DEPLOYPATH
