@@ -12,6 +12,12 @@ Thumbs.db
 .env
 .env.local
 
+# Internal dev notes
+SETUP.md
+FULL_UPGRADE.md
+*.md
+!README.md
+
 # Node (in case we add build tools later)
 node_modules/
 dist/
