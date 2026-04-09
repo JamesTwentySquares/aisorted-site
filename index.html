@@ -1166,12 +1166,13 @@
       btn.id = 'tally-minimise-btn';
       btn.title = 'Minimise survey';
       btn.setAttribute('aria-label', 'Minimise survey');
-      btn.innerHTML = MINIMISE_SVG;
+      btn.innerHTML = MINIMISE_SVG + '<span>Minimise</span>';
       btn.style.cssText =
-        'position:fixed;top:14px;right:52px;z-index:2147483647;' +
-        'background:transparent;border:none;cursor:pointer;color:#555;' +
-        'padding:4px;display:flex;align-items:center;justify-content:center;' +
-        'border-radius:4px;';
+        'position:fixed;top:10px;right:48px;z-index:2147483647;' +
+        'background:#fff;border:1px solid #ddd;cursor:pointer;color:#333;' +
+        'padding:5px 10px;display:flex;align-items:center;justify-content:center;' +
+        'border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,0.18);font-size:13px;' +
+        'font-family:inherit;gap:4px;';
 
       btn.addEventListener('click', function (e) {
         e.stopPropagation();
@@ -1190,11 +1191,12 @@
           tallyContainer.style.removeProperty('display');
           applyFullscreen();
           btn.style.cssText =
-            'position:fixed;top:14px;right:52px;z-index:2147483647;' +
-            'background:transparent;border:none;cursor:pointer;color:#555;' +
-            'padding:4px;display:flex;align-items:center;justify-content:center;' +
-            'border-radius:4px;';
-          btn.innerHTML = MINIMISE_SVG;
+            'position:fixed;top:10px;right:48px;z-index:2147483647;' +
+            'background:#fff;border:1px solid #ddd;cursor:pointer;color:#333;' +
+            'padding:5px 10px;display:flex;align-items:center;justify-content:center;' +
+            'border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,0.18);font-size:13px;' +
+            'font-family:inherit;gap:4px;';
+          btn.innerHTML = MINIMISE_SVG + '<span>Minimise</span>';
           btn.title = 'Minimise survey';
         }
       });
