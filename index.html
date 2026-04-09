@@ -1092,6 +1092,27 @@
       .audience-grid { grid-template-columns: 1fr 1fr; }
     }
   </style>
+
+  <!-- Tally survey popup -->
+  <script>
+    window.TallyConfig = {
+      "formId": "81Parz",
+      "popup": {
+        "emoji": {
+          "text": "👋",
+          "animation": "wave"
+        },
+        "open": {
+          "trigger": "time",
+          "ms": 20000
+        },
+        "autoClose": 2000,
+        "doNotShowAfterSubmit": true,
+        "overlay": true
+      }
+    };
+  </script>
+  <script async src="https://tally.so/widgets/embed.js"></script>
 </head>
 <body>
 
