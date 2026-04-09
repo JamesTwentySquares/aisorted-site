@@ -1096,185 +1096,219 @@
   <!-- Tally survey popup -->
   <script>
   (function () {
-    var minimised = false;
     var tallyIframe = null;
     var tallyContainer = null;
+    var modalOpen = false;
 
     var MINIMISE_SVG =
-      '<svg width="18" height="18" viewBox="0 0 24 24" fill="none"' +
+      '<svg width="16" height="16" viewBox="0 0 24 24" fill="none"' +
       ' stroke="currentColor" stroke-width="2.5" stroke-linecap="round">' +
       '<line x1="5" y1="12" x2="19" y2="12"/></svg>';
 
-    /* ── Layer 1: CSS :has() — works as soon as src is set, no JS detection needed ── */
+    /* ── CSS: dark overlay + centered modal ── */
     var css = document.createElement('style');
     css.textContent =
-      /* Outermost container → fullscreen, overlay non-clickable */
       'body>div:has(iframe[src*="tally"]){' +
+        'position:fixed!important;top:0!important;left:0!important;' +
         'width:100vw!important;height:100vh!important;' +
-        'max-width:100vw!important;max-height:100vh!important;' +
-        'top:0!important;left:0!important;right:0!important;bottom:0!important;' +
-        'border-radius:0!important;pointer-events:none!important;}' +
-      /* Every wrapper div inside the container also full-size */
-      'body>div:has(iframe[src*="tally"])>div{' +
-        'width:100%!important;height:100%!important;' +
-        'max-width:100%!important;max-height:100%!important;' +
-        'border-radius:0!important;}' +
-      /* Iframe fills the space and stays interactive */
+        'background:rgba(0,0,0,0.65)!important;' +
+        'pointer-events:none!important;z-index:2147483640!important;}' +
       'body>div:has(iframe[src*="tally"]) iframe{' +
-        'width:100%!important;height:100%!important;' +
+        'position:fixed!important;' +
+        'top:50%!important;left:50%!important;' +
+        'transform:translate(-50%,-50%)!important;' +
+        'width:min(860px,92vw)!important;' +
+        'height:90vh!important;max-height:90vh!important;' +
+        'border-radius:12px!important;' +
+        'box-shadow:0 24px 80px rgba(0,0,0,0.45)!important;' +
         'pointer-events:auto!important;}' +
-      /* Our own button always clickable */
-      '#tally-minimise-btn{pointer-events:auto!important;}';
+      '#tally-minimise-btn,#tally-close-btn{pointer-events:auto!important;}';
     document.head.appendChild(css);
 
-    /* ── Layer 2: capture-phase click interceptor — stops outside-close handler ── */
-    /* When fullscreen the iframe covers 100vw×100vh so every click is "inside".
-       We only block clicks that land on the host page itself (outside the iframe). */
+    /* ── Block outside-clicks from closing the popup ── */
     document.addEventListener('click', function (e) {
-      if (!tallyIframe || minimised) return;
+      if (!tallyIframe || !modalOpen) return;
       var r = tallyIframe.getBoundingClientRect();
-      var outside = e.clientX < r.left || e.clientX > r.right ||
-                    e.clientY < r.top  || e.clientY > r.bottom;
-      if (outside) e.stopImmediatePropagation();
+      if (e.clientX < r.left || e.clientX > r.right ||
+          e.clientY < r.top  || e.clientY > r.bottom) {
+        e.stopImmediatePropagation();
+      }
     }, true);
 
-    /* ── Layer 3: JS style overrides via setProperty (beats Tally inline styles) ── */
-    function applyFullscreen() {
+    /* ── Apply centered modal layout via JS ── */
+    function applyModal() {
       if (!tallyContainer || !tallyIframe) return;
       function sp(el, k, v) { el.style.setProperty(k, v, 'important'); }
-      ['width','max-width'].forEach(function(k){ sp(tallyContainer,k,'100vw'); });
-      ['height','max-height'].forEach(function(k){ sp(tallyContainer,k,'100vh'); });
+      sp(tallyContainer,'position','fixed');
       sp(tallyContainer,'top','0'); sp(tallyContainer,'left','0');
-      sp(tallyContainer,'right','0'); sp(tallyContainer,'bottom','0');
-      sp(tallyContainer,'border-radius','0');
+      sp(tallyContainer,'width','100vw'); sp(tallyContainer,'height','100vh');
+      sp(tallyContainer,'background','rgba(0,0,0,0.65)');
       sp(tallyContainer,'pointer-events','none');
-      /* Direct child wrappers */
-      var children = tallyContainer.children;
-      for (var i = 0; i < children.length; i++) {
-        sp(children[i],'width','100%'); sp(children[i],'height','100%');
-        sp(children[i],'max-width','100%'); sp(children[i],'max-height','100%');
-        sp(children[i],'border-radius','0');
+      sp(tallyContainer,'z-index','2147483640');
+      sp(tallyContainer,'border-radius','0');
+      /* Make intermediate wrapper divs transparent to layout */
+      var ch = tallyContainer.children;
+      for (var i = 0; i < ch.length; i++) {
+        if (ch[i] !== tallyIframe) sp(ch[i],'display','contents');
       }
-      sp(tallyIframe,'width','100%'); sp(tallyIframe,'height','100%');
+      /* Iframe: centered, capped width */
+      sp(tallyIframe,'position','fixed');
+      sp(tallyIframe,'top','50%'); sp(tallyIframe,'left','50%');
+      sp(tallyIframe,'transform','translate(-50%,-50%)');
+      sp(tallyIframe,'width','min(860px,92vw)');
+      sp(tallyIframe,'height','90vh'); sp(tallyIframe,'max-height','90vh');
+      sp(tallyIframe,'border-radius','12px');
+      sp(tallyIframe,'box-shadow','0 24px 80px rgba(0,0,0,0.45)');
       sp(tallyIframe,'pointer-events','auto');
+      sp(tallyIframe,'z-index','2147483641');
+      /* Position our control buttons relative to the modal's top-right corner */
+      setTimeout(positionButtons, 80);
     }
 
-    /* Permanently remove Tally's × from the DOM and watch for it being re-added */
+    function positionButtons() {
+      if (!tallyIframe) return;
+      var r = tallyIframe.getBoundingClientRect();
+      var fromRight = window.innerWidth - r.right;
+      var top = Math.round(r.top) + 10;
+      var close = document.getElementById('tally-close-btn');
+      var min   = document.getElementById('tally-minimise-btn');
+      if (close) {
+        close.style.setProperty('top',  top + 'px', 'important');
+        close.style.setProperty('right', (fromRight + 8) + 'px', 'important');
+      }
+      if (min) {
+        min.style.setProperty('top',  top + 'px', 'important');
+        min.style.setProperty('right', (fromRight + 8 + 42) + 'px', 'important');
+      }
+    }
+
+    /* ── Remove Tally's own buttons from DOM ── */
     function removeTallyButtons() {
       if (!tallyContainer) return;
-      var allBtns = tallyContainer.querySelectorAll('button');
-      for (var j = 0; j < allBtns.length; j++) {
-        var b = allBtns[j];
-        if (b.id !== 'tally-minimise-btn' && b.id !== 'tally-close-btn' && b.parentNode) {
+      var btns = tallyContainer.querySelectorAll('button');
+      for (var j = 0; j < btns.length; j++) {
+        var b = btns[j];
+        if (b.id !== 'tally-minimise-btn' && b.id !== 'tally-close-btn' && b.parentNode)
           b.parentNode.removeChild(b);
-        }
       }
     }
-    function startRemovingTallyButtons() {
+    function watchAndRemoveTallyButtons() {
       removeTallyButtons();
-      /* Watch for Tally re-inserting its button and remove it immediately */
-      var obs = new MutationObserver(removeTallyButtons);
-      if (tallyContainer) obs.observe(tallyContainer, { childList: true, subtree: true });
+      new MutationObserver(removeTallyButtons)
+        .observe(tallyContainer, { childList: true, subtree: true });
     }
 
-    var BTN_CSS =
-      'position:fixed;top:10px;z-index:2147483647;' +
+    /* ── Shared button base style ── */
+    var BTN =
+      'position:fixed;z-index:2147483647;top:10px;' +
       'background:#fff;border:1px solid #ddd;cursor:pointer;color:#333;' +
       'padding:5px 10px;display:flex;align-items:center;justify-content:center;' +
-      'border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,0.18);font-size:13px;' +
-      'font-family:inherit;gap:4px;';
+      'border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,0.15);' +
+      'font-size:13px;font-family:inherit;gap:4px;';
 
-    /* ── Minimise / restore button ── */
+    function showPeekButton() {
+      var peek = document.getElementById('tally-peek-btn');
+      if (peek) { peek.style.removeProperty('display'); return; }
+      var btn = document.createElement('button');
+      btn.id = 'tally-peek-btn';
+      btn.innerHTML = '&#128075; Quick survey?';
+      btn.style.cssText =
+        'position:fixed;bottom:24px;right:24px;z-index:2147483647;' +
+        'background:#f5a623;border:none;cursor:pointer;color:#fff;' +
+        'padding:12px 20px;display:flex;align-items:center;gap:8px;' +
+        'border-radius:999px;box-shadow:0 4px 20px rgba(245,166,35,0.4);' +
+        'font-size:15px;font-family:inherit;font-weight:600;' +
+        'transition:transform 0.15s,box-shadow 0.15s;';
+      btn.onmouseenter = function(){ btn.style.transform='scale(1.05)'; };
+      btn.onmouseleave = function(){ btn.style.transform='scale(1)'; };
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        btn.style.setProperty('display','none','important');
+        if (tallyContainer) {
+          /* Already loaded — just re-show */
+          tallyContainer.style.removeProperty('display');
+          applyModal();
+          modalOpen = true;
+          var c = document.getElementById('tally-close-btn');
+          var m = document.getElementById('tally-minimise-btn');
+          if (c) c.style.removeProperty('display');
+          if (m) m.style.removeProperty('display');
+        } else {
+          /* First open */
+          if (typeof Tally !== 'undefined')
+            Tally.openPopup('81Parz', { overlay:true, autoClose:2000, doNotShowAfterSubmit:true });
+        }
+      });
+      document.body.appendChild(btn);
+    }
+
     function addMinimiseButton() {
       if (document.getElementById('tally-minimise-btn')) return;
       var btn = document.createElement('button');
       btn.id = 'tally-minimise-btn';
-      btn.title = 'Minimise survey';
+      btn.title = 'Minimise';
       btn.innerHTML = MINIMISE_SVG + '<span>Minimise</span>';
-      btn.style.cssText = BTN_CSS + 'right:160px;';
-
+      btn.style.cssText = BTN + 'right:160px;';
       btn.addEventListener('click', function (e) {
         e.stopPropagation();
-        minimised = !minimised;
-        var closeBtn = document.getElementById('tally-close-btn');
-        if (minimised) {
-          tallyContainer.style.setProperty('display', 'none', 'important');
-          if (closeBtn) closeBtn.style.setProperty('display', 'none', 'important');
-          btn.style.cssText =
-            'position:fixed;bottom:24px;right:24px;top:auto;z-index:2147483647;' +
-            'background:#fff;border:1px solid #ddd;cursor:pointer;color:#333;' +
-            'padding:10px 16px;display:flex;align-items:center;gap:6px;' +
-            'border-radius:999px;box-shadow:0 2px 12px rgba(0,0,0,0.15);' +
-            'font-size:14px;font-family:inherit;';
-          btn.innerHTML = '&#128075; Take our survey';
-          btn.title = 'Restore survey';
-        } else {
-          tallyContainer.style.removeProperty('display');
-          applyFullscreen();
-          startRemovingTallyButtons();
-          if (closeBtn) closeBtn.style.cssText = BTN_CSS + 'right:116px;font-size:16px;';
-          btn.style.cssText = BTN_CSS + 'right:160px;';
-          btn.innerHTML = MINIMISE_SVG + '<span>Minimise</span>';
-          btn.title = 'Minimise survey';
-        }
+        modalOpen = false;
+        tallyContainer.style.setProperty('display','none','important');
+        btn.style.setProperty('display','none','important');
+        var c = document.getElementById('tally-close-btn');
+        if (c) c.style.setProperty('display','none','important');
+        /* Swap peek button label to "Continue survey" */
+        var peek = document.getElementById('tally-peek-btn');
+        if (peek) { peek.innerHTML = '&#128075; Continue survey'; peek.style.removeProperty('display'); }
+        else showPeekButton();
+        document.getElementById('tally-peek-btn').innerHTML = '&#128075; Continue survey';
       });
       document.body.appendChild(btn);
     }
 
-    /* ── Our own × close button ── */
     function addCloseButton() {
       if (document.getElementById('tally-close-btn')) return;
       var btn = document.createElement('button');
       btn.id = 'tally-close-btn';
-      btn.title = 'Close survey';
+      btn.title = 'Close';
       btn.innerHTML = '&#10005;';
-      btn.style.cssText = BTN_CSS + 'right:116px;font-size:16px;';
-
+      btn.style.cssText = BTN + 'right:116px;font-size:15px;';
       btn.addEventListener('click', function (e) {
         e.stopPropagation();
-        /* Hide everything and clean up our buttons */
+        modalOpen = false;
         if (tallyContainer) tallyContainer.style.setProperty('display','none','important');
         btn.style.setProperty('display','none','important');
-        var minBtn = document.getElementById('tally-minimise-btn');
-        if (minBtn) minBtn.style.setProperty('display','none','important');
+        var m = document.getElementById('tally-minimise-btn');
+        if (m) m.style.setProperty('display','none','important');
+        /* Don't show peek button again after intentional close */
       });
       document.body.appendChild(btn);
     }
 
-    /* ── Layer 4: Poll for the iframe (catches delayed src assignment too) ── */
+    /* ── Poll for iframe ── */
     var pollId = setInterval(function () {
-      /* Match any iframe whose src contains "tally" */
       var found = document.querySelector('iframe[src*="tally"]');
       if (!found) return;
       clearInterval(pollId);
       tallyIframe = found;
-      /* Walk up to the direct child of <body> */
       tallyContainer = tallyIframe;
-      while (tallyContainer.parentElement &&
-             tallyContainer.parentElement !== document.body) {
+      while (tallyContainer.parentElement && tallyContainer.parentElement !== document.body)
         tallyContainer = tallyContainer.parentElement;
-      }
-      applyFullscreen();
-      startRemovingTallyButtons();
+      modalOpen = true;
+      applyModal();
+      watchAndRemoveTallyButtons();
       addMinimiseButton();
       addCloseButton();
     }, 250);
+    setTimeout(function(){ clearInterval(pollId); }, 90000);
 
-    /* Stop polling after 90 s */
-    setTimeout(function () { clearInterval(pollId); }, 90000);
-  }());
-  </script>
-  <script>
-  window.TallyConfig = {
-    "formId": "81Parz",
-    "popup": {
-      "emoji": { "text": "👋", "animation": "wave" },
-      "open": { "trigger": "time", "ms": 15000 },
-      "autoClose": 2000,
-      "doNotShowAfterSubmit": true,
-      "overlay": true
+    /* ── Show peek button after 15 s ── */
+    function waitAndShowPeek() {
+      if (typeof Tally === 'undefined') { setTimeout(waitAndShowPeek, 100); return; }
+      setTimeout(showPeekButton, 15000);
     }
-  };
+    waitAndShowPeek();
+
+  }());
   </script>
   <script async src="https://tally.so/widgets/embed.js"></script>
 </head>
