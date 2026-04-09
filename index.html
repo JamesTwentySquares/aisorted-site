@@ -1095,34 +1095,33 @@
 
   <!-- Tally survey popup -->
   <script>
+  /* Customisations: fullscreen + minimise button + block overlay-close */
   (function () {
     var minimised = false;
 
-    /* ── Fullscreen + overlay override styles ── */
+    /* ── CSS: make popup fullscreen, block overlay pointer events ── */
     function injectStyles() {
       if (document.getElementById('tally-custom-css')) return;
       var s = document.createElement('style');
       s.id = 'tally-custom-css';
       s.textContent =
-        /* Popup root fills the whole viewport */
-        'div[id^="tally-"]{width:100vw!important;height:100vh!important;' +
-        'max-width:100vw!important;max-height:100vh!important;' +
-        'top:0!important;left:0!important;border-radius:0!important;}' +
-        /* Inner modal wrapper also fills viewport */
-        'div[id^="tally-"]>div{width:100vw!important;height:100vh!important;' +
-        'max-width:100vw!important;max-height:100vh!important;' +
-        'border-radius:0!important;}' +
-        /* Iframe fills its container */
+        'div[id^="tally-"]{' +
+          'width:100vw!important;height:100vh!important;' +
+          'max-width:100vw!important;max-height:100vh!important;' +
+          'top:0!important;left:0!important;border-radius:0!important;' +
+          'pointer-events:none!important;}' +
+        'div[id^="tally-"]>div{' +
+          'width:100vw!important;height:100vh!important;' +
+          'max-width:100vw!important;max-height:100vh!important;' +
+          'border-radius:0!important;}' +
         'iframe[src*="tally.so"]{width:100%!important;height:100%!important;}' +
-        /* Disable pointer events on overlay so only iframe receives clicks */
-        'div[id^="tally-"]{pointer-events:none!important;}' +
         'div[id^="tally-"] iframe[src*="tally.so"],' +
         'div[id^="tally-"] button,' +
         '#tally-minimise-btn{pointer-events:auto!important;}';
       document.head.appendChild(s);
     }
 
-    /* ── Minimise button ── */
+    /* ── Minimise / restore button ── */
     function addMinimiseButton(popupRoot) {
       if (document.getElementById('tally-minimise-btn')) return;
 
@@ -1134,25 +1133,15 @@
         '<svg width="18" height="18" viewBox="0 0 24 24" fill="none"' +
         ' stroke="currentColor" stroke-width="2.5" stroke-linecap="round">' +
         '<line x1="5" y1="12" x2="19" y2="12"/></svg>';
-
-      /* Sits just to the left of the Tally × button */
       btn.style.cssText =
         'position:fixed;top:14px;right:52px;z-index:2147483647;' +
         'background:transparent;border:none;cursor:pointer;color:#555;' +
         'padding:4px;display:flex;align-items:center;justify-content:center;' +
-        'border-radius:4px;transition:background 0.15s;';
-
-      btn.addEventListener('mouseenter', function () {
-        if (!minimised) btn.style.background = 'rgba(0,0,0,0.06)';
-      });
-      btn.addEventListener('mouseleave', function () {
-        if (!minimised) btn.style.background = 'transparent';
-      });
+        'border-radius:4px;';
 
       btn.addEventListener('click', function (e) {
         e.stopPropagation();
         minimised = !minimised;
-
         if (minimised) {
           popupRoot.style.display = 'none';
           btn.style.cssText =
@@ -1160,7 +1149,7 @@
             'background:#fff;border:1px solid #ddd;cursor:pointer;color:#333;' +
             'padding:10px 16px;display:flex;align-items:center;gap:6px;' +
             'border-radius:999px;box-shadow:0 2px 12px rgba(0,0,0,0.15);' +
-            'font-size:14px;font-family:inherit;transition:box-shadow 0.15s;';
+            'font-size:14px;font-family:inherit;';
           btn.innerHTML = '&#128075; Take our survey';
           btn.title = 'Restore survey';
         } else {
@@ -1169,7 +1158,7 @@
             'position:fixed;top:14px;right:52px;z-index:2147483647;' +
             'background:transparent;border:none;cursor:pointer;color:#555;' +
             'padding:4px;display:flex;align-items:center;justify-content:center;' +
-            'border-radius:4px;transition:background 0.15s;';
+            'border-radius:4px;';
           btn.innerHTML =
             '<svg width="18" height="18" viewBox="0 0 24 24" fill="none"' +
             ' stroke="currentColor" stroke-width="2.5" stroke-linecap="round">' +
@@ -1181,47 +1170,33 @@
       document.body.appendChild(btn);
     }
 
-    /* ── Watch for Tally popup being added to the DOM ── */
+    /* ── Watch for Tally popup being inserted into <body> ── */
     var observer = new MutationObserver(function (mutations) {
       mutations.forEach(function (m) {
         m.addedNodes.forEach(function (node) {
           if (node.nodeType !== 1) return;
-          var isPopup = (node.id && /^tally-/i.test(node.id)) ||
-            (node.querySelector && node.querySelector('iframe[src*="tally.so"]'));
-          if (!isPopup) return;
-
-          var root = (node.id && /^tally-/i.test(node.id))
-            ? node
-            : node.querySelector('iframe[src*="tally.so"]')
-                  .closest('div[style*="position: fixed"]') || node;
-
-          injectStyles();
-          addMinimiseButton(root);
+          if (node.id && /^tally-/i.test(node.id)) {
+            injectStyles();
+            addMinimiseButton(node);
+          }
         });
       });
     });
-
     observer.observe(document.body, { childList: true });
-
-    /* ── Open popup after 15 s, once Tally SDK is ready ── */
-    function tryOpen() {
-      if (typeof Tally === 'undefined') { setTimeout(tryOpen, 100); return; }
-      setTimeout(function () {
-        Tally.openPopup('81Parz', {
-          emoji: { text: '\uD83D\uDC4B', animation: 'wave' },
-          overlay: true,
-          autoClose: 2000,
-          doNotShowAfterSubmit: true
-        });
-      }, 15000);
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', tryOpen);
-    } else {
-      tryOpen();
-    }
   }());
+  </script>
+  <script>
+  /* Tally auto-trigger config — must be set before embed.js loads */
+  window.TallyConfig = {
+    "formId": "81Parz",
+    "popup": {
+      "emoji": { "text": "👋", "animation": "wave" },
+      "open": { "trigger": "time", "ms": 15000 },
+      "autoClose": 2000,
+      "doNotShowAfterSubmit": true,
+      "overlay": true
+    }
+  };
   </script>
   <script async src="https://tally.so/widgets/embed.js"></script>
 </head>
