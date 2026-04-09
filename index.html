@@ -1157,6 +1157,17 @@
       }
       sp(tallyIframe,'width','100%'); sp(tallyIframe,'height','100%');
       sp(tallyIframe,'pointer-events','auto');
+      /* Reposition Tally's own × close button so it sits at top-right, visible */
+      var allBtns = tallyContainer.querySelectorAll('button');
+      for (var j = 0; j < allBtns.length; j++) {
+        if (allBtns[j].id !== 'tally-minimise-btn') {
+          sp(allBtns[j],'position','fixed');
+          sp(allBtns[j],'top','10px');
+          sp(allBtns[j],'right','10px');
+          sp(allBtns[j],'z-index','2147483647');
+          sp(allBtns[j],'pointer-events','auto');
+        }
+      }
     }
 
     /* ── Minimise / restore button ── */
@@ -1191,7 +1202,7 @@
           tallyContainer.style.removeProperty('display');
           applyFullscreen();
           btn.style.cssText =
-            'position:fixed;top:10px;right:48px;z-index:2147483647;' +
+            'position:fixed;top:10px;right:56px;z-index:2147483647;' +
             'background:#fff;border:1px solid #ddd;cursor:pointer;color:#333;' +
             'padding:5px 10px;display:flex;align-items:center;justify-content:center;' +
             'border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,0.18);font-size:13px;' +
