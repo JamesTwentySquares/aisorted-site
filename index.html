@@ -1212,7 +1212,7 @@
           tallyContainer.style.removeProperty('display');
           applyFullscreen();
           startRemovingTallyButtons();
-          if (closeBtn) closeBtn.style.cssText = BTN_CSS + 'right:65px;font-size:16px;';
+          if (closeBtn) closeBtn.style.cssText = BTN_CSS + 'right:116px;font-size:16px;';
           btn.style.cssText = BTN_CSS + 'right:160px;';
           btn.innerHTML = MINIMISE_SVG + '<span>Minimise</span>';
           btn.title = 'Minimise survey';
@@ -1228,7 +1228,7 @@
       btn.id = 'tally-close-btn';
       btn.title = 'Close survey';
       btn.innerHTML = '&#10005;';
-      btn.style.cssText = BTN_CSS + 'right:65px;font-size:16px;';
+      btn.style.cssText = BTN_CSS + 'right:116px;font-size:16px;';
 
       btn.addEventListener('click', function (e) {
         e.stopPropagation();
