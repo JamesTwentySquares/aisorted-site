@@ -1157,8 +1157,13 @@
       }
       sp(tallyIframe,'width','100%'); sp(tallyIframe,'height','100%');
       sp(tallyIframe,'pointer-events','auto');
-      /* Reposition Tally's own × close button so it sits at top-right, visible */
-      var allBtns = tallyContainer.querySelectorAll('button');
+    }
+
+    /* Reposition Tally's × button — retries every 100 ms for 3 s because
+       Tally re-applies its own inline styles after we set them */
+    function fixCloseButton() {
+      function sp(el, k, v) { el.style.setProperty(k, v, 'important'); }
+      var allBtns = tallyContainer ? tallyContainer.querySelectorAll('button') : [];
       for (var j = 0; j < allBtns.length; j++) {
         if (allBtns[j].id !== 'tally-minimise-btn') {
           sp(allBtns[j],'position','fixed');
@@ -1168,6 +1173,13 @@
           sp(allBtns[j],'pointer-events','auto');
         }
       }
+    }
+    function startFixingCloseButton() {
+      var attempts = 0;
+      var id = setInterval(function () {
+        fixCloseButton();
+        if (++attempts >= 30) clearInterval(id); /* ~3 s */
+      }, 100);
     }
 
     /* ── Minimise / restore button ── */
@@ -1229,6 +1241,7 @@
       }
       applyFullscreen();
       addMinimiseButton();
+      startFixingCloseButton();
     }, 250);
 
     /* Stop polling after 90 s */
