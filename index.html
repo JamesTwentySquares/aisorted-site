@@ -1170,15 +1170,10 @@
       var r = tallyIframe.getBoundingClientRect();
       var fromRight = window.innerWidth - r.right;
       var top = Math.round(r.top) + 10;
-      var close = document.getElementById('tally-close-btn');
-      var min   = document.getElementById('tally-minimise-btn');
-      if (close) {
-        close.style.setProperty('top',  top + 'px', 'important');
-        close.style.setProperty('right', (fromRight + 24) + 'px', 'important');
-      }
+      var min = document.getElementById('tally-minimise-btn');
       if (min) {
         min.style.setProperty('top',  top + 'px', 'important');
-        min.style.setProperty('right', (fromRight + 24 + 42) + 'px', 'important');
+        min.style.setProperty('right', (fromRight + 24) + 'px', 'important');
       }
     }
 
@@ -1229,9 +1224,7 @@
           tallyContainer.style.removeProperty('display');
           applyModal();
           modalOpen = true;
-          var c = document.getElementById('tally-close-btn');
           var m = document.getElementById('tally-minimise-btn');
-          if (c) c.style.removeProperty('display');
           if (m) m.style.removeProperty('display');
         } else {
           /* First open */
@@ -1254,34 +1247,34 @@
         modalOpen = false;
         tallyContainer.style.setProperty('display','none','important');
         btn.style.setProperty('display','none','important');
-        var c = document.getElementById('tally-close-btn');
-        if (c) c.style.setProperty('display','none','important');
         /* Swap peek button label to "Continue survey" */
         var peek = document.getElementById('tally-peek-btn');
         if (peek) { peek.innerHTML = '&#128075; Continue survey'; peek.style.removeProperty('display'); }
-        else showPeekButton();
-        document.getElementById('tally-peek-btn').innerHTML = '&#128075; Continue survey';
+        else { showPeekButton(); document.getElementById('tally-peek-btn').innerHTML = '&#128075; Continue survey'; }
       });
       document.body.appendChild(btn);
     }
 
-    function addCloseButton() {
-      if (document.getElementById('tally-close-btn')) return;
-      var btn = document.createElement('button');
-      btn.id = 'tally-close-btn';
-      btn.title = 'Close';
-      btn.innerHTML = '&#10005;';
-      btn.style.cssText = BTN + 'right:116px;font-size:15px;';
-      btn.addEventListener('click', function (e) {
-        e.stopPropagation();
+    /* addCloseButton() disabled — using Tally's native close button instead */
+
+    /* ── Hide minimise button whenever Tally closes the form ── */
+    function watchContainerState() {
+      function hideMinimise() {
         modalOpen = false;
-        if (tallyContainer) tallyContainer.style.setProperty('display','none','important');
-        btn.style.setProperty('display','none','important');
         var m = document.getElementById('tally-minimise-btn');
         if (m) m.style.setProperty('display','none','important');
-        /* Don't show peek button again after intentional close */
-      });
-      document.body.appendChild(btn);
+      }
+      /* Watch for display:none being set on the container */
+      new MutationObserver(function () {
+        if (tallyContainer.style.display === 'none' ||
+            getComputedStyle(tallyContainer).display === 'none') {
+          hideMinimise();
+        }
+      }).observe(tallyContainer, { attributes: true, attributeFilter: ['style'] });
+      /* Watch for container being removed from DOM entirely */
+      new MutationObserver(function () {
+        if (!document.body.contains(tallyContainer)) hideMinimise();
+      }).observe(document.body, { childList: true });
     }
 
     /* ── Poll for iframe ── */
@@ -1296,8 +1289,8 @@
       modalOpen = true;
       applyModal();
       watchAndRemoveTallyButtons();
+      watchContainerState();
       addMinimiseButton();
-      addCloseButton();
     }, 250);
     setTimeout(function(){ clearInterval(pollId); }, 90000);
 
