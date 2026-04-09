@@ -1159,16 +1159,19 @@
       sp(tallyIframe,'pointer-events','auto');
     }
 
-    /* Hide Tally's own × button — we replace it with our own */
-    function hideTallyCloseButton() {
-      function sp(el, k, v) { el.style.setProperty(k, v, 'important'); }
-      var allBtns = tallyContainer ? tallyContainer.querySelectorAll('button') : [];
-      for (var j = 0; j < allBtns.length; j++) {
-        if (allBtns[j].id !== 'tally-minimise-btn' &&
-            allBtns[j].id !== 'tally-close-btn') {
-          sp(allBtns[j], 'display', 'none');
+    /* Hide Tally's own × button — retry for 3 s because Tally adds it after initial render */
+    function startHidingTallyCloseButton() {
+      var attempts = 0;
+      var id = setInterval(function () {
+        var allBtns = tallyContainer ? tallyContainer.querySelectorAll('button') : [];
+        for (var j = 0; j < allBtns.length; j++) {
+          if (allBtns[j].id !== 'tally-minimise-btn' &&
+              allBtns[j].id !== 'tally-close-btn') {
+            allBtns[j].style.setProperty('display', 'none', 'important');
+          }
         }
-      }
+        if (++attempts >= 30) clearInterval(id);
+      }, 100);
     }
 
     var BTN_CSS =
@@ -1185,7 +1188,7 @@
       btn.id = 'tally-minimise-btn';
       btn.title = 'Minimise survey';
       btn.innerHTML = MINIMISE_SVG + '<span>Minimise</span>';
-      btn.style.cssText = BTN_CSS + 'right:120px;';
+      btn.style.cssText = BTN_CSS + 'right:80px;';
 
       btn.addEventListener('click', function (e) {
         e.stopPropagation();
@@ -1205,9 +1208,9 @@
         } else {
           tallyContainer.style.removeProperty('display');
           applyFullscreen();
-          hideTallyCloseButton();
+          startHidingTallyCloseButton();
           if (closeBtn) closeBtn.style.cssText = BTN_CSS + 'right:10px;';
-          btn.style.cssText = BTN_CSS + 'right:120px;';
+          btn.style.cssText = BTN_CSS + 'right:80px;';
           btn.innerHTML = MINIMISE_SVG + '<span>Minimise</span>';
           btn.title = 'Minimise survey';
         }
@@ -1249,7 +1252,7 @@
         tallyContainer = tallyContainer.parentElement;
       }
       applyFullscreen();
-      hideTallyCloseButton();
+      startHidingTallyCloseButton();
       addMinimiseButton();
       addCloseButton();
     }, 250);
