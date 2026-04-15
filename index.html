@@ -73,15 +73,20 @@
     }
 
     .logo {
-      font-family: 'Syne', sans-serif;
-      font-weight: 800;
-      font-size: 1.25rem;
-      letter-spacing: -0.02em;
-      color: var(--text);
       text-decoration: none;
+      display: inline-flex;
+      align-items: center;
     }
 
-    .logo span { color: var(--accent); }
+    .logo-img {
+      height: 32px;
+      width: auto;
+      display: block;
+    }
+
+    .logo-img--footer {
+      height: 26px;
+    }
 
     nav ul {
       list-style: none;
@@ -1325,7 +1330,7 @@
 
   <!-- NAV -->
   <nav>
-    <a href="#" class="logo">AI<span>Sorted</span></a>
+    <a href="#" class="logo"><img src="logo.svg" alt="Sorted logo" class="logo-img"></a>
     <ul>
       <li><a href="#services">Services</a></li>
       <li><a href="#training">Training</a></li>
@@ -1818,7 +1823,7 @@
   <!-- FOOTER -->
   <footer>
     <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
-      <a href="#" class="logo" style="font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;text-decoration:none;color:var(--text);">AI<span style="color:var(--accent);">Sorted</span></a>
+      <a href="#" class="logo"><img src="logo.svg" alt="Sorted logo" class="logo-img logo-img--footer"></a>
       <span>&copy; 2026</span>
     </div>
     <div class="footer-links">
